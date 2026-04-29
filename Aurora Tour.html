@@ -1,21 +1,370 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>測試頁面</title>
-    <script src="https://tailwindcss.com"></script>
-</head>
-<body class="bg-gray-900 text-gray-100 font-sans min-h-screen flex items-center justify-center p-6">
-    <div class="max-w-md w-full bg-gray-800 border border-gray-700 p-8 rounded-2xl shadow-2xl text-center">
-        <!-- 這裡可以放內容 -->
-        <h1 class="text-3xl font-bold text-blue-400 mb-4">這是測試 1 頁面</h1>
-        <p class="text-gray-400 mb-8">你已經成功跳轉到下一層網頁了！</p>
+    <title>Aurora Tour - Team Calendar</title>
+    
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+
+    <style>
+        :root { --primary: #6366f1; --bg: #f8fafc; }
+        body { font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; display: flex; margin: 0; background: var(--bg); height: 100vh; overflow: hidden; }
         
-        <!-- 返回按鈕 -->
-        <a href="index.html" class="inline-block bg-gray-700 hover:bg-gray-600 px-6 py-2 rounded-lg transition">
-            ← 返回首頁
-        </a>
+        #sidebar { width: 240px; background: white; padding: 20px; border-right: 1px solid #e2e8f0; display: flex; flex-direction: column; flex-shrink: 0; }
+        .user-tag { font-size: 13px; color: #4f46e5; background: #eef2ff; padding: 8px; border-radius: 6px; margin-bottom: 15px; font-weight: bold; text-align: center; border: 1px solid #c7d2fe; }
+        .admin-badge { background: #ef4444; color: white; font-size: 10px; padding: 2px 4px; border-radius: 3px; margin-left: 5px; }
+        
+        h4 { margin: 10px 0 8px; color: #334155; font-size: 14px; border-bottom: 2px solid #f1f5f9; padding-bottom: 5px; }
+        
+        .fc-event { 
+            margin: 2px 0 !important; padding: 5px !important; cursor: grab; border-radius: 5px; 
+            color: white; text-align: center; font-weight: bold; border: 1px solid rgba(255,255,255,0.2) !important; 
+            font-size: 12px; opacity: 0.85; box-shadow: 0 3px 6px rgba(0,0,0,0.1); transition: 0.2s;
+        }
+
+        #calendar-container { flex-grow: 1; padding: 15px; height: 100vh; box-sizing: border-box; display: flex; flex-direction: column; }
+        #calendar { background: white; padding: 10px; border-radius: 12px; box-shadow: 0 8px 20px rgba(0,0,0,0.06); flex-grow: 1; overflow: hidden; }
+
+        #auth-overlay { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: #000 url('aurora.png') no-repeat center center; background-size: cover;
+            z-index: 9999; display: flex; justify-content: center; align-items: center; color: white;
+        }
+
+        .login-box { 
+            background: rgba(0, 0, 0, 0.55); 
+            padding: 20px 30px; 
+            border-radius: 15px; 
+            backdrop-filter: blur(15px); 
+            text-align: center; 
+            border: 1px solid rgba(255,255,255,0.15); 
+            width: 220px; 
+            transform: translateY(180px); 
+        }
+        
+        .login-box h2 { font-size: 22px; letter-spacing: 2px; margin-bottom: 15px; }
+        .login-box input { display: block; width: 100%; padding: 10px; margin: 10px 0; border-radius: 8px; border: none; text-align: center; font-size: 14px; outline: none; box-sizing: border-box; }
+        .login-box button { width: 100%; padding: 10px; border-radius: 8px; border: none; background: #4f46e5; color: white; cursor: pointer; font-weight: bold; font-size: 14px; margin-bottom: 15px;}
+
+        .obs-links { border-top: 1px solid rgba(255,255,255,0.2); padding-top: 12px; margin-top: 5px; }
+        .obs-links a { color: #818cf8; text-decoration: none; font-size: 11px; display: inline-block; margin: 0 8px; }
+
+        /* ── 六日底色 ─────────────────────────────────────────── */
+        /* Saturday */
+        .fc .fc-day-sat { background-color: rgba(99, 102, 241, 0.06) !important; }
+        /* Sunday */
+        .fc .fc-day-sun { background-color: rgba(239, 68, 68, 0.07) !important; }
+
+        /* 六日欄位標題顏色 */
+        .fc .fc-col-header-cell.fc-day-sat a { color: #4f46e5 !important; font-weight: 700; }
+        .fc .fc-col-header-cell.fc-day-sun a { color: #dc2626 !important; font-weight: 700; }
+
+        /* 國定假日 background event 標籤 */
+        .fc-bg-event { opacity: 0.18 !important; }
+
+        /* 假日標籤 */
+        .holiday-label {
+            position: absolute;
+            bottom: 4px;
+            left: 4px;
+            right: 4px;
+            font-size: 14px;
+            font-weight: 800;
+            color: #991b1b;
+            pointer-events: none;
+            line-height: 1.3;
+            text-align: center;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            letter-spacing: 0.02em;
+            text-shadow: 0 1px 3px rgba(255,255,255,0.95), 0 0 6px rgba(255,255,255,0.6);
+        }
+
+        /* Legend in sidebar */
+        .legend-row { display: flex; align-items: center; gap: 6px; font-size: 11px; color: #64748b; margin: 4px 0; }
+        .legend-dot { width: 12px; height: 12px; border-radius: 3px; flex-shrink: 0; }
+    </style>
+</head>
+<body>
+
+<div id="auth-overlay">
+    <div class="login-box">
+        <h2>Aurora Tour</h2>
+        <input type="text" id="login-user" placeholder="Name (e.g., Amy)">
+        <input type="password" id="login-pwd" placeholder="Password">
+        <button onclick="login()">Login</button>
+        <p id="login-msg" style="font-size: 11px; color: #ff8a8a; margin-top: -10px; margin-bottom: 10px; height: 12px;"></p>
+        
+        <div class="obs-links">
+            <a href="https://www.google.com/maps?q=Yellowknife,NT,Canada" target="_blank">📍 Yellowknife</a>
+            <a href="https://auroramax.com/live" target="_blank">🎬 AuroraMax</a>
+        </div>
     </div>
+</div>
+
+<div id="sidebar">
+    <div id="user-display" class="user-tag">Not Logged In</div>
+    <div id="admin-tools" style="display:none;"><h4 style="color:#ef4444;">🛠️ ADMIN Mode</h4></div>
+    <h4>👤 My Profile</h4>
+    <div id="my-event-zone"></div>
+
+    <!-- 圖例 -->
+    <h4 style="margin-top: 16px;">📅 Legend</h4>
+    <div class="legend-row"><div class="legend-dot" style="background:rgba(99,102,241,0.25);"></div> Saturday</div>
+    <div class="legend-row"><div class="legend-dot" style="background:rgba(239,68,68,0.25);"></div> Sunday</div>
+    <div class="legend-row"><div class="legend-dot" style="background:#fca5a5;"></div> 國定假日</div>
+
+    <button onclick="logout()" style="margin-top:auto; padding: 10px; border: none; background: #fee2e2; color: #991b1b; cursor: pointer; border-radius: 8px; font-weight: bold; font-size: 12px;">Logout</button>
+</div>
+
+<div id="calendar-container">
+    <div id="calendar"></div>
+</div>
+
+<script>
+    const firebaseConfig = {
+        apiKey: "AIzaSyCepC55CSnUYH7kL0YPqMu3i-bG76IOMXo",
+        authDomain: "staff-7951e.firebaseapp.com",
+        databaseURL: "https://staff-7951e-default-rtdb.firebaseio.com",
+        projectId: "staff-7951e",
+        appId: "1:372090977076:web:ba7a04005db12942e90361"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database().ref('leave_records');
+    const auth = firebase.auth();
+
+    const team = {
+        "admin@test.com":    { name: "Admin",    color: "#2d3436", isAdmin: true },
+        "castillo@test.com": { name: "Castillo", color: "#3b82f6" },
+        "chris@test.com":    { name: "Chris",    color: "#10b981" },
+        "alex@test.com":     { name: "Alex",     color: "#f59e0b" },
+        "pj@test.com":       { name: "PJ",       color: "#ef4444" },
+        "yc@test.com":       { name: "YC",       color: "#8b5cf6" },
+        "james@test.com":    { name: "James",    color: "#06b6d4" },
+        "amy@test.com":      { name: "Amy",      color: "#d946ef" }
+    };
+
+    // ── 台灣國定假日 2025–2026（依人事行政總處修正版） ─────────
+    // FullCalendar end 為「不含」的隔日
+    const TW_HOLIDAYS = [
+        // ── 2025（114年，修正版） ────────────────────────────────
+        { title: "元旦",           start: "2025-01-01", end: "2025-01-02" },
+        // 春節：1/27除夕前一日(彈性放假)～2/2，補班2/8
+        { title: "除夕前一日",     start: "2025-01-27", end: "2025-01-28" },
+        { title: "除夕",           start: "2025-01-28", end: "2025-01-29" },
+        { title: "春節 初一",      start: "2025-01-29", end: "2025-01-30" },
+        { title: "春節 初二",      start: "2025-01-30", end: "2025-01-31" },
+        { title: "春節 初三",      start: "2025-01-31", end: "2025-02-01" },
+        { title: "和平紀念日",     start: "2025-02-28", end: "2025-03-01" },
+        { title: "兒童節 補假",    start: "2025-04-03", end: "2025-04-04" },
+        { title: "兒童節・清明節", start: "2025-04-04", end: "2025-04-05" },
+        { title: "勞動節",         start: "2025-05-01", end: "2025-05-02" },
+        { title: "端午節 補假",    start: "2025-05-30", end: "2025-05-31" },
+        { title: "端午節",         start: "2025-05-31", end: "2025-06-01" },
+        { title: "教師節",         start: "2025-09-28", end: "2025-09-29" },
+        { title: "教師節 補假",    start: "2025-09-29", end: "2025-09-30" },
+        { title: "中秋節",         start: "2025-10-06", end: "2025-10-07" },
+        { title: "國慶日",         start: "2025-10-10", end: "2025-10-11" },
+        { title: "光復節 補假",    start: "2025-10-24", end: "2025-10-25" },
+        { title: "臺灣光復節",     start: "2025-10-25", end: "2025-10-26" },
+        { title: "行憲紀念日",     start: "2025-12-25", end: "2025-12-26" },
+
+        // ── 2026（115年） ────────────────────────────────────────
+        { title: "元旦",           start: "2026-01-01", end: "2026-01-02" },
+        // 春節：2/14(六例假)～2/22(日例假)，無補班
+        { title: "小年夜",         start: "2026-02-15", end: "2026-02-16" },
+        { title: "除夕",           start: "2026-02-16", end: "2026-02-17" },
+        { title: "春節 初一",      start: "2026-02-17", end: "2026-02-18" },
+        { title: "春節 初二",      start: "2026-02-18", end: "2026-02-19" },
+        { title: "春節 初三",      start: "2026-02-19", end: "2026-02-20" },
+        { title: "小年夜 補假",    start: "2026-02-20", end: "2026-02-21" },
+        { title: "和平紀念日 補假",start: "2026-02-27", end: "2026-02-28" },
+        { title: "和平紀念日",     start: "2026-02-28", end: "2026-03-01" },
+        { title: "兒童節 補假",    start: "2026-04-03", end: "2026-04-04" },
+        { title: "兒童節",         start: "2026-04-04", end: "2026-04-05" },
+        { title: "清明節",         start: "2026-04-05", end: "2026-04-06" },
+        { title: "清明節 補假",    start: "2026-04-06", end: "2026-04-07" },
+        { title: "勞動節",         start: "2026-05-01", end: "2026-05-02" },
+        { title: "端午節",         start: "2026-06-19", end: "2026-06-20" },
+        { title: "中秋節",         start: "2026-09-25", end: "2026-09-26" },
+        { title: "教師節",         start: "2026-09-28", end: "2026-09-29" },
+        { title: "國慶日 補假",    start: "2026-10-09", end: "2026-10-10" },
+        { title: "國慶日",         start: "2026-10-10", end: "2026-10-11" },
+        { title: "臺灣光復節",     start: "2026-10-25", end: "2026-10-26" },
+        { title: "光復節 補假",    start: "2026-10-26", end: "2026-10-27" },
+        { title: "行憲紀念日",     start: "2026-12-25", end: "2026-12-26" },
+    ];
+
+    // 轉換為 FullCalendar background events
+    const holidayEvents = TW_HOLIDAYS.map(h => ({
+        title: h.title,
+        start: h.start,
+        end:   h.end,
+        display: 'background',
+        backgroundColor: '#fca5a5',
+        classNames: ['holiday-bg'],
+        extendedProps: { isHoliday: true, holidayName: h.title }
+    }));
+
+    let currentUserData = null;
+
+    function addOneDay(dateStr) {
+        let d = new Date(dateStr);
+        d.setDate(d.getDate() + 1);
+        return d.toISOString().split('T')[0];
+    }
+
+    function login() {
+        let userPart = document.getElementById('login-user').value.trim().toLowerCase();
+        if (!userPart) return;
+        const fullEmail = userPart.includes('@') ? userPart : `${userPart}@test.com`;
+        const pass = document.getElementById('login-pwd').value;
+        auth.signInWithEmailAndPassword(fullEmail, pass).catch(() => {
+            document.getElementById('login-msg').innerText = "Login Failed";
+        });
+    }
+
+    function logout() { auth.signOut().then(() => location.reload()); }
+
+    auth.onAuthStateChanged(user => {
+        if (user) {
+            const userEmail = user.email.toLowerCase();
+            currentUserData = team[userEmail];
+            if (!currentUserData) { logout(); return; }
+            document.getElementById('auth-overlay').style.display = 'none';
+            document.getElementById('user-display').innerHTML =
+                `👤 ${currentUserData.name}${currentUserData.isAdmin ? '<span class="admin-badge">ADMIN</span>' : ''}`;
+            if (currentUserData.isAdmin) document.getElementById('admin-tools').style.display = 'block';
+            document.getElementById('my-event-zone').innerHTML = `
+                <div class='fc-event' style="background:${currentUserData.color}" 
+                     data-event='{"title": "${currentUserData.name}", "color": "${currentUserData.color}"}'>
+                     ${currentUserData.name} (Drag)
+                </div>`;
+            initCalendar();
+        }
+    });
+
+    function initCalendar() {
+        const calendarEl = document.getElementById('calendar');
+        new FullCalendar.Draggable(document.getElementById('my-event-zone'), {
+            itemSelector: '.fc-event',
+            eventData: function(eventEl) {
+                const data = JSON.parse(eventEl.getAttribute('data-event'));
+                return { title: data.title, backgroundColor: data.color, borderColor: data.color };
+            }
+        });
+
+        const calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            locale: 'zh-tw',
+            editable: true,
+            droppable: true,
+            headerToolbar: { left: 'prev,next today', center: 'title', right: '' },
+            height: 'parent',
+            dayMaxEventRows: false,
+
+            // ── 國定假日背景事件注入 ────────────────────────────
+            events: holidayEvents,
+
+            // ── 在日期格子上疊加假日名稱標籤（用本地時間，避免 UTC+8 片移）
+            dayCellDidMount: function(info) {
+                const d = info.date;
+                const dateStr = d.getFullYear() + '-'
+                    + String(d.getMonth() + 1).padStart(2, '0') + '-'
+                    + String(d.getDate()).padStart(2, '0');
+                const matched = TW_HOLIDAYS.filter(h => h.start === dateStr);
+                if (matched.length > 0) {
+                    const label = document.createElement('div');
+                    label.className = 'holiday-label';
+                    label.textContent = matched.map(h => h.title).join('・');
+                    info.el.style.position = 'relative';
+                    info.el.appendChild(label);
+                }
+            },
+
+            eventReceive: function(info) {
+                // 忽略假日 background event 的 receive
+                if (info.event.extendedProps.isHoliday) { info.event.remove(); return; }
+                const note = prompt("Please enter hours or remark (e.g., 1hr or Vacation):", "Full Day");
+                if (note === null) { info.event.remove(); return; }
+                const finalTitle = `${currentUserData.name} (${note})`;
+                const newId = "ID_" + Date.now();
+                let end = info.event.endStr || addOneDay(info.event.startStr);
+                db.child(newId).set({
+                    id: newId,
+                    ownerUid: auth.currentUser.uid,
+                    title: finalTitle,
+                    start: info.event.startStr,
+                    end: end,
+                    color: info.event.backgroundColor
+                });
+                info.event.remove();
+            },
+
+            eventDrop: function(info) {
+                if (info.event.extendedProps.isHoliday) { info.revert(); return; }
+                if (currentUserData.isAdmin || info.event.extendedProps.ownerUid === auth.currentUser.uid) {
+                    syncFirebase(info.event);
+                } else {
+                    alert("Permission Denied: You can only edit your own events.");
+                    info.revert();
+                }
+            },
+
+            eventResize: function(info) {
+                if (info.event.extendedProps.isHoliday) { info.revert(); return; }
+                if (currentUserData.isAdmin || info.event.extendedProps.ownerUid === auth.currentUser.uid) {
+                    syncFirebase(info.event);
+                } else {
+                    alert("Permission Denied: You can only edit your own events.");
+                    info.revert();
+                }
+            },
+
+            eventClick: function(info) {
+                if (info.event.extendedProps.isHoliday) return; // 假日不可刪
+                if (currentUserData.isAdmin || info.event.extendedProps.ownerUid === auth.currentUser.uid) {
+                    if (confirm(`Delete this record?`)) db.child(info.event.id).remove();
+                }
+            }
+        });
+
+        calendar.render();
+
+        // Firebase 即時同步（只處理非假日的 leave 記錄）
+        db.on('value', (snapshot) => {
+            const data = snapshot.val();
+            // 先移除所有 leave events，保留假日 background events
+            calendar.getEvents().forEach(evt => {
+                if (!evt.extendedProps.isHoliday) evt.remove();
+            });
+            if (data) {
+                Object.values(data).forEach(evt => {
+                    calendar.addEvent({
+                        id: evt.id,
+                        title: evt.title,
+                        start: evt.start,
+                        end: evt.end,
+                        backgroundColor: evt.color,
+                        borderColor: evt.color,
+                        extendedProps: { ownerUid: evt.ownerUid }
+                    });
+                });
+            }
+        });
+
+        function syncFirebase(event) {
+            let endStr = event.endStr;
+            if (!endStr || endStr === event.startStr) endStr = addOneDay(event.startStr);
+            db.child(event.id).update({ start: event.startStr, end: endStr });
+        }
+    }
+</script>
 </body>
 </html>
