@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的簡易首頁</title>
+    <script src="https://tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 text-gray-900 font-sans">
+    <!-- 導覽列 -->
+    <nav class="p-6 flex justify-between items-center bg-white shadow-sm">
+        <div class="text-2xl font-bold text-blue-600">BrandLogo</div>
+        <div class="space-x-6">
+            <a href="#" class="hover:text-blue-500">首頁</a>
+            <a href="#" class="hover:text-blue-500">服務</a>
+            <a href="#" class="hover:text-blue-500">關於我們</a>
+        </div>
+    </nav>
+
+    <!-- 英雄區 (Hero Section) -->
+    <header class="py-20 px-6 text-center">
+        <h1 class="text-5xl font-extrabold mb-4">歡迎來到我的網站</h1>
+        <p class="text-xl text-gray-600 mb-8">在這裡，我們提供最簡單、最高效的解決方案。</p>
+        <button class="bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition">立即開始</button>
+    </header>
+
+    <!-- 特色介紹 -->
+    <section class="max-w-6xl mx-auto py-12 px-6 grid md:grid-cols-3 gap-8">
+        <div class="p-6 bg-white rounded-xl shadow-sm border border-gray-100">
+            <h3 class="text-xl font-bold mb-2">快速部署</h3>
+            <p class="text-gray-600">只需幾秒鐘即可讓你的創意上線。</p>
+        </div>
+        <div class="p-6 bg-white rounded-xl shadow-sm border border-gray-100">
+            <h3 class="text-xl font-bold mb-2">響應式設計</h3>
+            <p class="text-gray-600">無論是手機或電腦，外觀都一樣完美。</p>
+        </div>
+        <div class="p-6 bg-white rounded-xl shadow-sm border border-gray-100">
+            <h3 class="text-xl font-bold mb-2">完全免費</h3>
+            <p class="text-gray-600">開源且友善，適合各種小型專案。</p>
+        </div>
+    </section>
+</body>
+</html>
