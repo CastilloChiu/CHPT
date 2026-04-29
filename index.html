@@ -3,38 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>我的簡易首頁</title>
+    <title>CHPT - 首頁</title>
     <script src="https://tailwindcss.com"></script>
 </head>
-<body class="bg-gray-50 text-gray-900 font-sans">
-    <nav class="p-6 flex justify-between items-center bg-white shadow-sm">
-        <div class="text-2xl font-bold text-blue-600">BrandLogo</div>
-        <div class="space-x-6">
-            <a href="#" class="hover:text-blue-500">首頁</a>
-            <a href="#" class="hover:text-blue-500">服務</a>
-            <a href="#" class="hover:text-blue-500">關於我們</a>
+<body class="bg-gray-900 text-gray-100 font-sans min-h-screen">
+    <!-- 導航欄 -->
+    <nav class="p-6 flex justify-between items-center border-b border-gray-800 bg-gray-900 sticky top-0">
+        <div class="text-3xl font-black tracking-tighter text-white">
+            <span class="bg-blue-600 px-2 py-1 rounded">CH</span>PT
         </div>
     </nav>
 
-    <header class="py-20 px-6 text-center">
-        <h1 class="text-5xl font-extrabold mb-4">歡迎來到我的網站</h1>
-        <p class="text-xl text-gray-600 mb-8">在這裡，我們提供最簡單、最高效的解決方案。</p>
-        <button class="bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition">立即開始</button>
-    </header>
+    <!-- 主要內容 -->
+    <main class="max-w-2xl mx-auto py-20 px-6">
+        <h1 class="text-4xl font-bold mb-10 text-center">歡迎來到 CHPT</h1>
+        
+        <div class="space-y-4">
+            <!-- 測試 1 -->
+            <a href="page1.html" class="block p-6 bg-gray-800 border border-gray-700 rounded-xl hover:border-blue-500 hover:bg-gray-750 transition group">
+                <div class="flex justify-between items-center">
+                    <span class="text-xl font-medium">1. 測試 1</span>
+                    <span class="text-gray-500 group-hover:text-blue-500">→</span>
+                </div>
+            </a>
 
-    <section class="max-w-6xl mx-auto py-12 px-6 grid md:grid-cols-3 gap-8">
-        <div class="p-6 bg-white rounded-xl shadow-sm border border-gray-100">
-            <h3 class="text-xl font-bold mb-2">快速部署</h3>
-            <p class="text-gray-600">只需幾秒鐘即可讓你的創意上線。</p>
+            <!-- 測試 2 -->
+            <a href="page2.html" class="block p-6 bg-gray-800 border border-gray-700 rounded-xl hover:border-blue-500 hover:bg-gray-750 transition group">
+                <div class="flex justify-between items-center">
+                    <span class="text-xl font-medium">2. 測試 2</span>
+                    <span class="text-gray-500 group-hover:text-blue-500">→</span>
+                </div>
+            </a>
+
+            <!-- 測試 3 -->
+            <a href="page3.html" class="block p-6 bg-gray-800 border border-gray-700 rounded-xl hover:border-blue-500 hover:bg-gray-750 transition group">
+                <div class="flex justify-between items-center">
+                    <span class="text-xl font-medium">3. 測試 3</span>
+                    <span class="text-gray-500 group-hover:text-blue-500">→</span>
+                </div>
+            </a>
         </div>
-        <div class="p-6 bg-white rounded-xl shadow-sm border border-gray-100">
-            <h3 class="text-xl font-bold mb-2">響應式設計</h3>
-            <p class="text-gray-600">無論是手機或電腦，外觀都一樣完美。</p>
-        </div>
-        <div class="p-6 bg-white rounded-xl shadow-sm border border-gray-100">
-            <h3 class="text-xl font-bold mb-2">完全免費</h3>
-            <p class="text-gray-600">開源且友善，適合各種小型專案。</p>
-        </div>
-    </section>
+    </main>
 </body>
 </html>
