@@ -3,133 +3,125 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Castillo | Test</title>
+    <title>Castillo | Digital Studio</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        /* 自定義背景光暈動畫 */
-        .spotlight {
-            background: radial-gradient(circle at 50% -20%, #1e40af 0%, rgba(17, 24, 39, 0) 70%);
-        }
-    </style>
 </head>
-<body class="bg-gray-900 text-gray-100 font-sans min-h-screen spotlight">
+<body class="bg-white text-gray-900 font-sans">
     <!-- 導航欄 -->
-    <nav class="p-6 flex justify-between items-center border-b border-gray-800 bg-gray-900/50 backdrop-blur-md sticky top-0 z-50">
-        <div class="text-2xl font-black tracking-widest text-white uppercase">
-            <span class="bg-blue-600 px-3 py-1 rounded-lg shadow-[0_0_15px_rgba(37,99,235,0.5)]">Castillo</span> 
-            <span class="ml-1 text-gray-400 font-light">Test</span>
+    <nav class="border-b border-gray-200 bg-white sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <span class="text-2xl font-bold text-gray-900">Castillo</span>
+                <span class="text-sm font-light text-gray-500">Digital Studio</span>
+            </div>
+            <div class="flex space-x-8 text-sm text-gray-600">
+                <a href="#tools" class="hover:text-gray-900 transition">工具</a>
+                <a href="#explore" class="hover:text-gray-900 transition">探索</a>
+            </div>
         </div>
     </nav>
 
     <!-- 主要內容 -->
-    <main class="max-w-xl mx-auto py-24 px-6">
-        <!-- 小工具區域 -->
-        <header class="text-center mb-12">
-            <h2 class="text-3xl font-extrabold tracking-tight mb-2 bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 to-teal-500">
-                小工具
-            </h2>
-            <p class="text-gray-500 text-sm tracking-widest uppercase">Useful Tools</p>
-        </header>
-
-        <div class="grid grid-cols-2 gap-4 mb-16">
-            <!-- Time Count Tool 卡片 -->
-            <a href="time-count-tool.html" class="group relative">
-                <div class="absolute -inset-0.5 bg-gradient-to-r from-emerald-600 to-teal-600 rounded-xl blur opacity-20 group-hover:opacity-50 transition duration-500"></div>
-                <div class="relative p-6 bg-gray-800 border border-gray-700 rounded-xl leading-none flex flex-col items-center justify-between hover:bg-gray-800/80 transition duration-300 h-full">
-                    <div class="text-center">
-                        <div class="w-10 h-10 bg-emerald-900/30 rounded-full flex items-center justify-center border border-emerald-500/30 text-emerald-400 mx-auto mb-3 group-hover:scale-110 transition-transform">
-                            ⏱️
-                        </div>
-                        <span class="text-lg font-semibold text-white tracking-wide block">Time Count</span>
-                        <p class="text-gray-500 text-xs mt-1 font-light">計時工具</p>
-                    </div>
-                    <span class="text-emerald-500 font-bold mt-3 group-hover:translate-y-1 transition-transform duration-300">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                        </svg>
-                    </span>
-                </div>
-            </a>
-
-            <!-- Unit Change Tool 卡片 -->
-            <a href="unit-change-tool.html" class="group relative">
-                <div class="absolute -inset-0.5 bg-gradient-to-r from-emerald-600 to-teal-600 rounded-xl blur opacity-20 group-hover:opacity-50 transition duration-500"></div>
-                <div class="relative p-6 bg-gray-800 border border-gray-700 rounded-xl leading-none flex flex-col items-center justify-between hover:bg-gray-800/80 transition duration-300 h-full">
-                    <div class="text-center">
-                        <div class="w-10 h-10 bg-emerald-900/30 rounded-full flex items-center justify-center border border-emerald-500/30 text-emerald-400 mx-auto mb-3 group-hover:scale-110 transition-transform">
-                            🔄
-                        </div>
-                        <span class="text-lg font-semibold text-white tracking-wide block">Unit Change</span>
-                        <p class="text-gray-500 text-xs mt-1 font-light">單位轉換</p>
-                    </div>
-                    <span class="text-emerald-500 font-bold mt-3 group-hover:translate-y-1 transition-transform duration-300">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                        </svg>
-                    </span>
-                </div>
-            </a>
+    <main class="max-w-6xl mx-auto px-6 py-16">
+        <!-- 頁面標題 -->
+        <div class="mb-20">
+            <h1 class="text-5xl font-bold text-gray-900 mb-3">Welcome to Castillo</h1>
+            <p class="text-lg text-gray-500">探索我們的工具和內容，啟發你的創意</p>
         </div>
+
+        <!-- 小工具區域 -->
+        <section id="tools" class="mb-20">
+            <div class="mb-8">
+                <h2 class="text-2xl font-bold text-gray-900">工具集</h2>
+                <p class="text-gray-500 text-sm mt-1">快速、實用的日常工具</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <!-- Time Count Tool -->
+                <a href="time-count-tool.html" class="group">
+                    <div class="h-40 bg-gradient-to-br from-emerald-50 to-emerald-100 border border-emerald-200 rounded-lg p-6 hover:shadow-md transition duration-300 flex flex-col justify-between">
+                        <div>
+                            <div class="text-3xl mb-3">⏱️</div>
+                            <h3 class="font-semibold text-gray-900">計時工具</h3>
+                            <p class="text-sm text-gray-600 mt-1">Time Count Tool</p>
+                        </div>
+                        <div class="text-emerald-600 font-medium text-sm group-hover:translate-x-1 transition-transform">
+                            開啟 →
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Unit Change Tool -->
+                <a href="unit-change-tool.html" class="group">
+                    <div class="h-40 bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200 rounded-lg p-6 hover:shadow-md transition duration-300 flex flex-col justify-between">
+                        <div>
+                            <div class="text-3xl mb-3">🔄</div>
+                            <h3 class="font-semibold text-gray-900">單位轉換</h3>
+                            <p class="text-sm text-gray-600 mt-1">Unit Change Tool</p>
+                        </div>
+                        <div class="text-blue-600 font-medium text-sm group-hover:translate-x-1 transition-transform">
+                            開啟 →
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </section>
 
         <!-- 分隔線 -->
-        <div class="border-t border-gray-800 my-12"></div>
+        <div class="border-t border-gray-200 my-16"></div>
 
         <!-- 探索區域 -->
-        <header class="text-center mb-12">
-            <h1 class="text-3xl font-extrabold tracking-tight mb-2 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-indigo-500">
-                探索
-            </h1>
-            <p class="text-gray-500 text-sm tracking-widest uppercase">Select an exploration</p>
-        </header>
-        
-        <div class="space-y-6">
-            <!-- Aurora Tour 卡片 -->
-            <a href="AuroraTour.html" class="block group relative">
-                <div class="absolute -inset-0.5 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl blur opacity-20 group-hover:opacity-50 transition duration-500"></div>
-                <div class="relative p-8 bg-gray-800 border border-gray-700 rounded-2xl leading-none flex items-center justify-between hover:bg-gray-800/80 transition duration-300">
-                    <div class="flex items-center space-x-4">
-                        <div class="w-12 h-12 bg-blue-900/30 rounded-full flex items-center justify-center border border-blue-500/30 text-blue-400 group-hover:scale-110 transition-transform">
-                            ✨
+        <section id="explore">
+            <div class="mb-8">
+                <h2 class="text-2xl font-bold text-gray-900">探索</h2>
+                <p class="text-gray-500 text-sm mt-1">發現更多精彩內容</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Aurora Tour -->
+                <a href="AuroraTour.html" class="group">
+                    <div class="border border-gray-200 rounded-lg p-8 hover:border-gray-900 hover:shadow-lg transition duration-300">
+                        <div class="flex items-start justify-between mb-4">
+                            <div>
+                                <div class="text-4xl mb-3">✨</div>
+                                <h3 class="text-xl font-bold text-gray-900">Aurora Tour</h3>
+                                <p class="text-gray-600 text-sm mt-2">Start your journey here</p>
+                            </div>
+                            <span class="text-gray-400 group-hover:text-gray-900 transition">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                                </svg>
+                            </span>
                         </div>
-                        <div>
-                            <span class="text-xl font-semibold text-white tracking-wide">Aurora Tour</span>
-                            <p class="text-gray-500 text-xs mt-1 font-light italic">Start your journey here</p>
-                        </div>
+                        <p class="text-sm text-gray-500">探索我們獨特的設計理念和創意方向</p>
                     </div>
-                    <span class="text-blue-500 font-bold group-hover:translate-x-3 transition-transform duration-300">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                        </svg>
-                    </span>
-                </div>
-            </a>
+                </a>
 
-            <!-- 西批大師哥 卡片 -->
-            <a href="https://chiucp.github.io/" class="block group relative">
-                <div class="absolute -inset-0.5 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl blur opacity-20 group-hover:opacity-50 transition duration-500"></div>
-                <div class="relative p-8 bg-gray-800 border border-gray-700 rounded-2xl leading-none flex items-center justify-between hover:bg-gray-800/80 transition duration-300">
-                    <div class="flex items-center space-x-4">
-                        <div class="w-12 h-12 bg-blue-900/30 rounded-full flex items-center justify-center border border-blue-500/30 text-blue-400 group-hover:scale-110 transition-transform">
-                            ✨
+                <!-- 西批大師哥 -->
+                <a href="https://chiucp.github.io/" class="group">
+                    <div class="border border-gray-200 rounded-lg p-8 hover:border-gray-900 hover:shadow-lg transition duration-300">
+                        <div class="flex items-start justify-between mb-4">
+                            <div>
+                                <div class="text-4xl mb-3">🛠️</div>
+                                <h3 class="text-xl font-bold text-gray-900">西批大師哥</h3>
+                                <p class="text-gray-600 text-sm mt-2">Magic Tools</p>
+                            </div>
+                            <span class="text-gray-400 group-hover:text-gray-900 transition">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                                </svg>
+                            </span>
                         </div>
-                        <div>
-                            <span class="text-xl font-semibold text-white tracking-wide">西批大師哥 </span>
-                            <p class="text-gray-500 text-xs mt-1 font-light italic">Magic Tools</p>
-                        </div>
+                        <p class="text-sm text-gray-500">發現更多實用工具和資源</p>
                     </div>
-                    <span class="text-blue-500 font-bold group-hover:translate-x-3 transition-transform duration-300">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                        </svg>
-                    </span>
-                </div>
-            </a>
-        </div>
-
-        <!-- 底部裝飾線 -->
-        <footer class="mt-16 border-t border-gray-800 pt-8 text-center">
-            <p class="text-gray-600 text-xs font-light">&copy; 2026 Castillo Digital Studio</p>
-        </footer>
+                </a>
+            </div>
+        </section>
     </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-gray-200 bg-gray-50 mt-20">
+        <div class="max-w-6xl mx-auto px-6 py-12 text-center text-sm text-gray-600">
+            <p>&copy; 2026 Castillo Digital Studio. All rights reserved.</p>
+        </div>
+    </footer>
 </body>
 </html>
