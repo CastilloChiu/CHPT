@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>單位轉換工具 - 批次轉換</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            padding: 30px;
+        }
+        h1 { text-align: center; color: #333; margin-bottom: 10px; font-size: 28px; }
+        .subtitle { text-align: center; color: #666; margin-bottom: 30px; font-size: 14px; }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; color: #444; font-weight: 500; }
+        input, select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        input:focus, select:focus { outline: none; border-color: #667eea; }
+        .row { display: flex; gap: 15px; }
+        .col { flex: 1; }
+        .type-selector { display: flex; gap: 10px; margin-bottom: 25px; flex-wrap: wrap; }
+        .type-btn {
+            flex: 1;
+            min-width: 100px;
+            padding: 10px;
+            background: #f0f0f0;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        .type-btn:hover { background: #e0e0e0; }
+        .type-btn.active { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-color: #667eea; }
+        .result-box {
+            margin-top: 25px;
+            padding: 20px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 8px;
+            display: none;
+        }
+        .result-box.show { display: block; animation: fadeIn 0.3s; }
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 15px;
+            margin: 8px 0;
+            background: white;
+            border-radius: 6px;
+            font-size: 16px;
+        }
+        .result-item.highlight {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-weight: 600;
+        }
+        .result-item .from { color: #666; }
+        .result-item.highlight .from { color: rgba(255,255,255,0.9); }
+        .result-item .to { font-weight: 600; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        .footer { margin-top: 30px; text-align: center; color: #999; font-size: 12px; }
+        .copy-btn {
+            margin-top: 15px;
+            padding: 10px;
+            background: #28a745;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            width: 100%;
+        }
+        .copy-btn:hover { background: #218838; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔄 單位轉換工具</h1>
+        <p class="subtitle">輸入數值和單位，一次顯示所有轉換結果</p>
+        
+        <div class="type-selector">
+            <button class="type-btn active" data-type="length">長度</button>
+            <button class="type-btn" data-type="resistance">電阻</button>
+            <button class="type-btn" data-type="capacitance">電容</button>
+            <button class="type-btn" data-type="frequency">頻率</button>
+            <button class="type-btn" data-type="temperature">溫度</button>
+        </div>
+        
+        <div class="row">
+            <div class="col form-group">
+                <label>數值</label>
+                <input type="number" id="inputValue" placeholder="輸入數值" step="any">
+            </div>
+            <div class="col form-group">
+                <label>原始單位</label>
+                <select id="fromUnit"></select>
+            </div>
+        </div>
+        
+        <div class="result-box" id="resultBox">
+            <div id="resultList"></div>
+            <button class="copy-btn" onclick="copyResults()">📋 複製所有結果</button>
+        </div>
+        
+        <div class="footer">
+            單位轉換工具 v2.0 | 批次轉換模式
+        </div>
+    </div>
+    
+    <script>
+        const units = {
+            length: ['mm', 'mil', 'inch', 'um', 'm'],
+            resistance: ['ohm', 'k', 'm'],
+            capacitance: ['pF', 'nF', 'uF'],
+            frequency: ['Hz', 'kHz', 'MHz', 'GHz'],
+            temperature: ['°C', '°F', 'K']
+        };
+        
+        const factors = {
+            length: { 'mm': 1, 'mil': 0.0254, 'inch': 25.4, 'um': 0.001, 'm': 1000 },
+            resistance: { 'ohm': 1, 'k': 1000, 'm': 0.001 },
+            capacitance: { 'pF': 1, 'nF': 1000, 'uF': 1000000 },
+            frequency: { 'Hz': 1, 'kHz': 1000, 'MHz': 1e6, 'GHz': 1e9 }
+        };
+        
+        let currentType = 'length';
+        let conversionResults = [];
+        
+        function init() {
+            updateUnits();
+            
+            document.querySelectorAll('.type-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    currentType = btn.dataset.type;
+                    updateUnits();
+                    document.getElementById('resultBox').classList.remove('show');
+                });
+            });
+            
+            document.getElementById('inputValue').addEventListener('input', convert);
+            document.getElementById('fromUnit').addEventListener('change', convert);
+        }
+        
+        function updateUnits() {
+            const fromSelect = document.getElementById('fromUnit');
+            fromSelect.innerHTML = '';
+            units[currentType].forEach(unit => {
+                fromSelect.add(new Option(unit, unit));
+            });
+        }
+        
+        function convert() {
+            const value = parseFloat(document.getElementById('inputValue').value);
+            const fromUnit = document.getElementById('fromUnit').value;
+            const resultBox = document.getElementById('resultBox');
+            const resultList = document.getElementById('resultList');
+            
+            if (isNaN(value)) {
+                resultBox.classList.remove('show');
+                conversionResults = [];
+                return;
+            }
+            
+            conversionResults = [];
+            
+            if (currentType === 'temperature') {
+                units.temperature.forEach(toUnit => {
+                    const result = convertTemperature(value, fromUnit, toUnit);
+                    conversionResults.push({ from: fromUnit, to: toUnit, result: result });
+                });
+            } else {
+                const f = factors[currentType];
+                const valueInBase = value * f[fromUnit];
+                units[currentType].forEach(toUnit => {
+                    const result = valueInBase / f[toUnit];
+                    conversionResults.push({ from: fromUnit, to: toUnit, result: result });
+                });
+            }
+            
+            let html = '';
+            conversionResults.forEach(item => {
+                const isOriginal = item.to === item.from;
+                const formatted = Number.isInteger(item.result) ? item.result : item.result.toFixed(6).replace(/\.?0+$/, '');
+                const highlightClass = isOriginal ? 'highlight' : '';
+                html += `
+                    <div class="result-item ${highlightClass}">
+                        <span class="from">${item.to}</span>
+                        <span class="to">${formatted}</span>
+                    </div>
+                `;
+            });
+            
+            resultList.innerHTML = html;
+            resultBox.classList.add('show');
+        }
+        
+        function convertTemperature(value, fromUnit, toUnit) {
+            let celsius;
+            if (fromUnit === '°C') celsius = value;
+            else if (fromUnit === '°F') celsius = (value - 32) * 5/9;
+            else celsius = value - 273.15;
+            
+            if (toUnit === '°C') return celsius;
+            else if (toUnit === '°F') return celsius * 9/5 + 32;
+            else return celsius + 273.15;
+        }
+        
+        function copyResults() {
+            const text = conversionResults.map(item => {
+                const formatted = Number.isInteger(item.result) ? item.result : item.result.toFixed(6).replace(/\.?0+$/, '');
+                return `${item.from} → ${item.to}: ${formatted}`;
+            }).join('\n');
+            
+            navigator.clipboard.writeText(text).then(() => {
+                const btn = document.querySelector('.copy-btn');
+                btn.textContent = '✅ 已複製!';
+                setTimeout(() => btn.textContent = '📋 複製所有結果', 2000);
+            });
+        }
+        
+        init();
+    </script>
+</body>
+</html>
