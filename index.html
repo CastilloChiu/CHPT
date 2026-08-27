@@ -15,67 +15,21 @@
                 <span class="text-sm font-light text-gray-500">Digital Studio</span>
             </div>
             <div class="flex space-x-8 text-sm text-gray-600">
-                <a href="#tools" class="hover:text-gray-900 transition">工具</a>
                 <a href="#explore" class="hover:text-gray-900 transition">探索</a>
+                <a href="#tools" class="hover:text-gray-900 transition">工具</a>
             </div>
         </div>
     </nav>
 
     <!-- 主要內容 -->
     <main class="max-w-6xl mx-auto px-6 py-16">
-        <!-- 頁面標題 -->
-        <div class="mb-20">
-            <h1 class="text-5xl font-bold text-gray-900 mb-3">Welcome to Castillo</h1>
-            <p class="text-lg text-gray-500">探索我們的工具和內容，啟發你的創意</p>
-        </div>
-
-        <!-- 小工具區域 -->
-        <section id="tools" class="mb-20">
-            <div class="mb-8">
-                <h2 class="text-2xl font-bold text-gray-900">工具集</h2>
-                <p class="text-gray-500 text-sm mt-1">快速、實用的日常工具</p>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                <!-- Time Count Tool -->
-                <a href="time-count-tool.html" class="group">
-                    <div class="h-40 bg-gradient-to-br from-emerald-50 to-emerald-100 border border-emerald-200 rounded-lg p-6 hover:shadow-md transition duration-300 flex flex-col justify-between">
-                        <div>
-                            <div class="text-3xl mb-3">⏱️</div>
-                            <h3 class="font-semibold text-gray-900">計時工具</h3>
-                            <p class="text-sm text-gray-600 mt-1">Time Count Tool</p>
-                        </div>
-                        <div class="text-emerald-600 font-medium text-sm group-hover:translate-x-1 transition-transform">
-                            開啟 →
-                        </div>
-                    </div>
-                </a>
-
-                <!-- Unit Change Tool -->
-                <a href="unit-change-tool.html" class="group">
-                    <div class="h-40 bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200 rounded-lg p-6 hover:shadow-md transition duration-300 flex flex-col justify-between">
-                        <div>
-                            <div class="text-3xl mb-3">🔄</div>
-                            <h3 class="font-semibold text-gray-900">單位轉換</h3>
-                            <p class="text-sm text-gray-600 mt-1">Unit Change Tool</p>
-                        </div>
-                        <div class="text-blue-600 font-medium text-sm group-hover:translate-x-1 transition-transform">
-                            開啟 →
-                        </div>
-                    </div>
-                </a>
-            </div>
-        </section>
-
-        <!-- 分隔線 -->
-        <div class="border-t border-gray-200 my-16"></div>
-
         <!-- 探索區域 -->
         <section id="explore">
             <div class="mb-8">
                 <h2 class="text-2xl font-bold text-gray-900">探索</h2>
                 <p class="text-gray-500 text-sm mt-1">發現更多精彩內容</p>
             </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-20">
                 <!-- Aurora Tour -->
                 <a href="AuroraTour.html" class="group">
                     <div class="border border-gray-200 rounded-lg p-8 hover:border-gray-900 hover:shadow-lg transition duration-300">
@@ -111,6 +65,36 @@
                             </span>
                         </div>
                         <p class="text-sm text-gray-500">發現更多實用工具和資源</p>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+        <!-- 分隔線 -->
+        <div class="border-t border-gray-200 my-16"></div>
+
+        <!-- 小工具區域 -->
+        <section id="tools">
+            <div class="mb-8">
+                <h2 class="text-2xl font-bold text-gray-900">工具集</h2>
+                <p class="text-gray-500 text-sm mt-1">快速、實用的日常工具</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+                <!-- Time Count Tool -->
+                <a href="time-count-tool.html" class="group">
+                    <div class="bg-gradient-to-br from-emerald-50 to-emerald-100 border border-emerald-200 rounded-lg p-4 hover:shadow-md transition duration-300">
+                        <div class="text-2xl mb-2">⏱️</div>
+                        <h3 class="font-semibold text-gray-900 text-sm">計時工具</h3>
+                        <p class="text-xs text-gray-600 mt-1">Time Count</p>
+                    </div>
+                </a>
+
+                <!-- Unit Change Tool -->
+                <a href="unit-change-tool.html" class="group">
+                    <div class="bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200 rounded-lg p-4 hover:shadow-md transition duration-300">
+                        <div class="text-2xl mb-2">🔄</div>
+                        <h3 class="font-semibold text-gray-900 text-sm">單位轉換</h3>
+                        <p class="text-xs text-gray-600 mt-1">Unit Change</p>
                     </div>
                 </a>
             </div>
