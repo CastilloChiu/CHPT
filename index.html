@@ -23,9 +23,61 @@
 
     <!-- 主要內容 -->
     <main class="max-w-xl mx-auto py-24 px-6">
-        <header class="text-center mb-16">
-            <h1 class="text-5xl font-extrabold tracking-tight mb-3 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-indigo-500">
-                Item
+        <!-- 小工具區域 -->
+        <header class="text-center mb-12">
+            <h2 class="text-3xl font-extrabold tracking-tight mb-2 bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 to-teal-500">
+                小工具
+            </h2>
+            <p class="text-gray-500 text-sm tracking-widest uppercase">Useful Tools</p>
+        </header>
+
+        <div class="grid grid-cols-2 gap-4 mb-16">
+            <!-- Time Count Tool 卡片 -->
+            <a href="time-count-tool.html" class="group relative">
+                <div class="absolute -inset-0.5 bg-gradient-to-r from-emerald-600 to-teal-600 rounded-xl blur opacity-20 group-hover:opacity-50 transition duration-500"></div>
+                <div class="relative p-6 bg-gray-800 border border-gray-700 rounded-xl leading-none flex flex-col items-center justify-between hover:bg-gray-800/80 transition duration-300 h-full">
+                    <div class="text-center">
+                        <div class="w-10 h-10 bg-emerald-900/30 rounded-full flex items-center justify-center border border-emerald-500/30 text-emerald-400 mx-auto mb-3 group-hover:scale-110 transition-transform">
+                            ⏱️
+                        </div>
+                        <span class="text-lg font-semibold text-white tracking-wide block">Time Count</span>
+                        <p class="text-gray-500 text-xs mt-1 font-light">計時工具</p>
+                    </div>
+                    <span class="text-emerald-500 font-bold mt-3 group-hover:translate-y-1 transition-transform duration-300">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                        </svg>
+                    </span>
+                </div>
+            </a>
+
+            <!-- Unit Change Tool 卡片 -->
+            <a href="unit-change-tool.html" class="group relative">
+                <div class="absolute -inset-0.5 bg-gradient-to-r from-emerald-600 to-teal-600 rounded-xl blur opacity-20 group-hover:opacity-50 transition duration-500"></div>
+                <div class="relative p-6 bg-gray-800 border border-gray-700 rounded-xl leading-none flex flex-col items-center justify-between hover:bg-gray-800/80 transition duration-300 h-full">
+                    <div class="text-center">
+                        <div class="w-10 h-10 bg-emerald-900/30 rounded-full flex items-center justify-center border border-emerald-500/30 text-emerald-400 mx-auto mb-3 group-hover:scale-110 transition-transform">
+                            🔄
+                        </div>
+                        <span class="text-lg font-semibold text-white tracking-wide block">Unit Change</span>
+                        <p class="text-gray-500 text-xs mt-1 font-light">單位轉換</p>
+                    </div>
+                    <span class="text-emerald-500 font-bold mt-3 group-hover:translate-y-1 transition-transform duration-300">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                        </svg>
+                    </span>
+                </div>
+            </a>
+        </div>
+
+        <!-- 分隔線 -->
+        <div class="border-t border-gray-800 my-12"></div>
+
+        <!-- 探索區域 -->
+        <header class="text-center mb-12">
+            <h1 class="text-3xl font-extrabold tracking-tight mb-2 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-indigo-500">
+                探索
             </h1>
             <p class="text-gray-500 text-sm tracking-widest uppercase">Select an exploration</p>
         </header>
@@ -45,13 +97,13 @@
                         </div>
                     </div>
                     <span class="text-blue-500 font-bold group-hover:translate-x-3 transition-transform duration-300">
-                        <svg xmlns="http://w3.org" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
                         </svg>
                     </span>
                 </div>
             </a>
-            <div class="space-y-6">
+
             <!-- 西批大師哥 卡片 -->
             <a href="https://chiucp.github.io/" class="block group relative">
                 <div class="absolute -inset-0.5 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl blur opacity-20 group-hover:opacity-50 transition duration-500"></div>
@@ -66,26 +118,16 @@
                         </div>
                     </div>
                     <span class="text-blue-500 font-bold group-hover:translate-x-3 transition-transform duration-300">
-                        <svg xmlns="http://w3.org" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
                         </svg>
                     </span>
                 </div>
             </a>
-          
-            <!-- 隱藏的測試項目 (註釋保留) -->
-            <!-- 
-            <a href="page2.html" class="block p-6 bg-gray-800 border border-gray-700 rounded-xl hover:border-blue-500 hover:bg-gray-700 transition group shadow-lg opacity-50">
-                <div class="flex justify-between items-center">
-                    <span class="text-xl font-medium">2. 測試 2 (Coming Soon)</span>
-                    <span>🔒</span>
-                </div>
-            </a>
-            -->
         </div>
 
         <!-- 底部裝飾線 -->
-        <footer class="mt-32 border-t border-gray-800 pt-8 text-center">
+        <footer class="mt-16 border-t border-gray-800 pt-8 text-center">
             <p class="text-gray-600 text-xs font-light">&copy; 2026 Castillo Digital Studio</p>
         </footer>
     </main>
