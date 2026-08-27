@@ -2,34 +2,55 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>時間差計算機</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            width: 340px;
-            padding: 12px;
             background: linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%);
             min-height: 100vh;
+            padding: 12px;
         }
         .container {
+            max-width: 600px;
+            margin: 0 auto;
             background: white;
-            border-radius: 12px;
+            border-radius: 16px;
             box-shadow: 0 4px 16px rgba(0,0,0,0.15);
-            padding: 20px;
+            padding: 24px;
         }
-        h1 { text-align: center; color: #333; margin-bottom: 6px; font-size: 20px; }
-        .subtitle { text-align: center; color: #888; margin-bottom: 18px; font-size: 12px; }
-        .section-label { font-size: 13px; color: #666; font-weight: 600; margin-bottom: 8px; }
-        .day-row { display: flex; gap: 10px; margin-bottom: 18px; }
+        h1 { 
+            text-align: center; 
+            color: #333; 
+            margin-bottom: 8px; 
+            font-size: clamp(24px, 6vw, 28px);
+        }
+        .subtitle { 
+            text-align: center; 
+            color: #888; 
+            margin-bottom: 24px; 
+            font-size: clamp(12px, 3.5vw, 14px);
+        }
+        .section-label { 
+            font-size: clamp(12px, 3.5vw, 14px); 
+            color: #666; 
+            font-weight: 600; 
+            margin-bottom: 12px; 
+        }
+        .day-row { 
+            display: flex; 
+            gap: 12px; 
+            margin-bottom: 24px; 
+        }
         .day-pill {
             flex: 1;
-            padding: 12px;
+            padding: clamp(12px, 3vw, 16px);
             background: #f5f5f5;
             border: 2px solid #e0e0e0;
             border-radius: 24px;
             cursor: pointer;
-            font-size: 15px;
+            font-size: clamp(14px, 4vw, 16px);
             font-weight: 600;
             color: #666;
             transition: all 0.2s;
@@ -40,14 +61,19 @@
             color: white;
             border-color: transparent;
         }
-        .time-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 18px; }
+        .time-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(90px, 1fr)); 
+            gap: 10px; 
+            margin-bottom: 24px; 
+        }
         .time-pill {
-            padding: 10px;
+            padding: clamp(10px, 2.5vw, 14px);
             background: #f5f5f5;
             border: 2px solid #e0e0e0;
             border-radius: 20px;
             cursor: pointer;
-            font-size: 14px;
+            font-size: clamp(13px, 3.5vw, 15px);
             font-weight: 600;
             color: #555;
             transition: all 0.2s;
@@ -60,17 +86,45 @@
         }
         .result {
             display: none;
-            padding: 15px;
+            padding: clamp(15px, 4vw, 20px);
             background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            border-radius: 8px;
+            border-radius: 12px;
             text-align: center;
         }
         .result.show { display: block; }
-        .target { color: #555; font-size: 13px; margin-bottom: 8px; }
-        .countdown { font-size: 15px; color: #333; }
-        .countdown strong { font-size: 22px; color: #2193b0; }
-        .warning { color: #e74c3c; font-size: 15px; font-weight: 600; }
-        .footer { margin-top: 16px; text-align: center; color: #bbb; font-size: 11px; }
+        .target { 
+            color: #555; 
+            font-size: clamp(12px, 3.5vw, 14px); 
+            margin-bottom: 12px; 
+        }
+        .countdown { 
+            font-size: clamp(14px, 4vw, 16px); 
+            color: #333; 
+        }
+        .countdown strong { 
+            font-size: clamp(20px, 6vw, 28px); 
+            color: #2193b0; 
+            display: block;
+            margin-top: 8px;
+        }
+        .warning { 
+            color: #e74c3c; 
+            font-size: clamp(14px, 4vw, 16px); 
+            font-weight: 600; 
+        }
+        .footer { 
+            margin-top: 20px; 
+            text-align: center; 
+            color: #bbb; 
+            font-size: clamp(10px, 2.5vw, 12px); 
+        }
+
+        /* 平板和電腦版本 */
+        @media (min-width: 768px) {
+            .container {
+                padding: 32px;
+            }
+        }
     </style>
 </head>
 <body>
