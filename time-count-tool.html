@@ -10,6 +10,7 @@
             width: 340px;
             padding: 12px;
             background: linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%);
+            min-height: 100vh;
         }
         .container {
             background: white;
@@ -94,6 +95,75 @@
         <div class="footer">時間差計算機 v2.0 | 24 小時制</div>
     </div>
     
-    <script src="popup.js"></script>
+    <script>
+        const times = [2, 6, 10, 14, 18, 22];
+        let selectedDay = 0;
+
+        function pad(n) { return String(n).padStart(2, '0'); }
+
+        function buildTimeGrid() {
+            const grid = document.getElementById('timeGrid');
+            times.forEach(h => {
+                const btn = document.createElement('button');
+                btn.className = 'time-pill';
+                btn.textContent = pad(h) + ':00';
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.time-pill').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    calc();
+                });
+                grid.appendChild(btn);
+            });
+        }
+
+        document.querySelectorAll('.day-pill').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.day-pill').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                selectedDay = parseInt(btn.dataset.day);
+                if (document.querySelector('.time-pill.active')) calc();
+            });
+        });
+
+        function calc() {
+            const activeTime = document.querySelector('.time-pill.active');
+            const result = document.getElementById('result');
+            const targetDisplay = document.getElementById('targetDisplay');
+            const countdown = document.getElementById('countdown');
+            
+            if (!activeTime) {
+                result.classList.remove('show');
+                return;
+            }
+            
+            const hour = parseInt(activeTime.textContent.split(':')[0]);
+            const now = new Date();
+            const target = new Date(now.getFullYear(), now.getMonth(), now.getDate() + selectedDay, hour, 0, 0);
+            const diff = target - new Date();
+            
+            const dayName = selectedDay === 0 ? '今天' : '明天';
+            targetDisplay.textContent = '目標時間：' + dayName + ' ' + pad(target.getHours()) + ':00';
+            
+            if (diff < 0) {
+                countdown.innerHTML = '<span class="warning">⚠️ 這個時間已經過了</span>';
+                result.classList.add('show');
+                return;
+            }
+            
+            const totalSec = Math.floor(diff / 1000);
+            const days = Math.floor(totalSec / 86400);
+            const hours = Math.floor((totalSec % 86400) / 3600);
+            const mins = Math.floor((totalSec % 3600) / 60);
+            
+            let text = '';
+            if (days > 0) text += days + ' 天 ';
+            text += hours + ' 小時 ' + mins + ' 分';
+            
+            countdown.innerHTML = '還有 <strong>' + text + '</strong>';
+            result.classList.add('show');
+        }
+
+        buildTimeGrid();
+    </script>
 </body>
 </html>
