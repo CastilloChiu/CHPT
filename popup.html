@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <title>時間差計算機</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            width: 340px;
+            padding: 12px;
+            background: linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%);
+        }
+        .container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+            padding: 20px;
+        }
+        h1 { text-align: center; color: #333; margin-bottom: 6px; font-size: 20px; }
+        .subtitle { text-align: center; color: #888; margin-bottom: 18px; font-size: 12px; }
+        .section-label { font-size: 13px; color: #666; font-weight: 600; margin-bottom: 8px; }
+        .day-row { display: flex; gap: 10px; margin-bottom: 18px; }
+        .day-pill {
+            flex: 1;
+            padding: 12px;
+            background: #f5f5f5;
+            border: 2px solid #e0e0e0;
+            border-radius: 24px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 600;
+            color: #666;
+            transition: all 0.2s;
+        }
+        .day-pill:hover { border-color: #6dd5ed; }
+        .day-pill.active {
+            background: linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%);
+            color: white;
+            border-color: transparent;
+        }
+        .time-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 18px; }
+        .time-pill {
+            padding: 10px;
+            background: #f5f5f5;
+            border: 2px solid #e0e0e0;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            color: #555;
+            transition: all 0.2s;
+        }
+        .time-pill:hover { border-color: #6dd5ed; background: #eef9fc; }
+        .time-pill.active {
+            background: linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%);
+            color: white;
+            border-color: transparent;
+        }
+        .result {
+            display: none;
+            padding: 15px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 8px;
+            text-align: center;
+        }
+        .result.show { display: block; }
+        .target { color: #555; font-size: 13px; margin-bottom: 8px; }
+        .countdown { font-size: 15px; color: #333; }
+        .countdown strong { font-size: 22px; color: #2193b0; }
+        .warning { color: #e74c3c; font-size: 15px; font-weight: 600; }
+        .footer { margin-top: 16px; text-align: center; color: #bbb; font-size: 11px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>⏰ 時間差計算機</h1>
+        <p class="subtitle">選日子 + 選時間，自動計算</p>
+        
+        <div class="section-label">日子</div>
+        <div class="day-row">
+            <button class="day-pill active" data-day="0">今天</button>
+            <button class="day-pill" data-day="1">明天</button>
+        </div>
+        
+        <div class="section-label">時間</div>
+        <div class="time-grid" id="timeGrid"></div>
+        
+        <div class="result" id="result">
+            <div class="target" id="targetDisplay"></div>
+            <div class="countdown" id="countdown"></div>
+        </div>
+        
+        <div class="footer">時間差計算機 v2.0 | 24 小時制</div>
+    </div>
+    
+    <script src="popup.js"></script>
+</body>
+</html>
