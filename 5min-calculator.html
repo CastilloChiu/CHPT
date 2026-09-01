@@ -100,5 +100,20 @@
             const now = new Date();
             const future = new Date(now.getTime() + totalMinutes * 60000);
             
-            const hours*
-
+            const hours = String(future.getHours()).padStart(2, '0');
+            const minutes = String(future.getMinutes()).padStart(2, '0');
+            
+            totalDisplay.textContent = `${num} × 5分鐘 = ${totalMinutes}分鐘`;
+            timeDisplay.textContent = `${hours}:${minutes}`;
+            
+            if (future.getDate() > now.getDate()) {
+                dayNote.textContent = '⚠️ 已超過午夜，日期改變';
+            } else {
+                dayNote.textContent = '';
+            }
+            
+            result.classList.add('show');
+        });
+    </script>
+</body>
+</html>
