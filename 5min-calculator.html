@@ -2,31 +2,37 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>5分鐘計算機</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            width: 320px;
+            min-height: 100vh;
             padding: 12px;
             background: linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
         .container {
             background: white;
             border-radius: 12px;
             box-shadow: 0 4px 16px rgba(0,0,0,0.15);
             padding: 20px;
+            width: 100%;
+            max-width: 400px;
         }
-        h1 { text-align: center; color: #333; margin-bottom: 6px; font-size: 20px; }
-        .subtitle { text-align: center; color: #888; margin-bottom: 18px; font-size: 12px; }
+        h1 { text-align: center; color: #333; margin-bottom: 6px; font-size: 24px; }
+        .subtitle { text-align: center; color: #888; margin-bottom: 18px; font-size: 14px; }
         .form-group { margin-bottom: 15px; }
-        label { display: block; margin-bottom: 6px; color: #444; font-weight: 500; font-size: 14px; }
+        label { display: block; margin-bottom: 6px; color: #444; font-weight: 500; font-size: 16px; }
         input {
             width: 100%;
             padding: 12px;
             border: 2px solid #e0e0e0;
             border-radius: 8px;
-            font-size: 22px;
+            font-size: 20px;
             font-weight: 600;
             text-align: center;
         }
@@ -39,10 +45,21 @@
             text-align: center;
         }
         .result.show { display: block; }
-        .total { color: #555; font-size: 13px; margin-bottom: 8px; }
-        .time { font-size: 34px; font-weight: 700; color: #2193b0; }
-        .day-note { color: #e67e22; font-size: 13px; font-weight: 600; margin-top: 6px; }
-        .footer { margin-top: 16px; text-align: center; color: #bbb; font-size: 11px; }
+        .total { color: #555; font-size: 14px; margin-bottom: 8px; }
+        .time { font-size: 48px; font-weight: 700; color: #2193b0; }
+        .day-note { color: #e67e22; font-size: 14px; font-weight: 600; margin-top: 6px; }
+        .footer { margin-top: 16px; text-align: center; color: #bbb; font-size: 12px; }
+
+        /* 平板和桌機 */
+        @media (min-width: 768px) {
+            h1 { font-size: 28px; }
+            .subtitle { font-size: 16px; }
+            label { font-size: 18px; }
+            input { font-size: 24px; padding: 14px; }
+            .total { font-size: 16px; }
+            .time { font-size: 56px; }
+            .day-note { font-size: 16px; }
+        }
     </style>
 </head>
 <body>
@@ -83,20 +100,5 @@
             const now = new Date();
             const future = new Date(now.getTime() + totalMinutes * 60000);
             
-            const hours = String(future.getHours()).padStart(2, '0');
-            const minutes = String(future.getMinutes()).padStart(2, '0');
-            
-            totalDisplay.textContent = `共 ${totalMinutes} 分鐘`;
-            timeDisplay.textContent = `${hours}:${minutes}`;
-            
-            if (future.getDate() > now.getDate()) {
-                dayNote.textContent = '⚠️ 已跨越到明天';
-            } else {
-                dayNote.textContent = '';
-            }
-            
-            result.classList.add('show');
-        });
-    </script>
-</body>
-</html>
+            const hours*
+
