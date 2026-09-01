@@ -64,6 +64,39 @@
         <div class="footer">5分鐘計算機 v1.0</div>
     </div>
     
-    <script src="popup.js"></script>
+    <script>
+        const numInput = document.getElementById('numInput');
+        const result = document.getElementById('result');
+        const totalDisplay = document.getElementById('totalDisplay');
+        const timeDisplay = document.getElementById('timeDisplay');
+        const dayNote = document.getElementById('dayNote');
+
+        numInput.addEventListener('input', function() {
+            const num = parseInt(this.value) || 0;
+            
+            if (num === 0) {
+                result.classList.remove('show');
+                return;
+            }
+
+            const totalMinutes = num * 5;
+            const now = new Date();
+            const future = new Date(now.getTime() + totalMinutes * 60000);
+            
+            const hours = String(future.getHours()).padStart(2, '0');
+            const minutes = String(future.getMinutes()).padStart(2, '0');
+            
+            totalDisplay.textContent = `共 ${totalMinutes} 分鐘`;
+            timeDisplay.textContent = `${hours}:${minutes}`;
+            
+            if (future.getDate() > now.getDate()) {
+                dayNote.textContent = '⚠️ 已跨越到明天';
+            } else {
+                dayNote.textContent = '';
+            }
+            
+            result.classList.add('show');
+        });
+    </script>
 </body>
 </html>
