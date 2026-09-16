@@ -14,6 +14,27 @@
         :root { --primary: #6366f1; --bg: #f8fafc; }
         body { font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; display: flex; margin: 0; background: var(--bg); height: 100vh; overflow: hidden; }
         
+        /* ── 漢堡菜單按鈕（右上角浮動） ── */
+        #hamburger-btn {
+            display: none;
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            z-index: 1001;
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            font-size: 20px;
+            backdrop-filter: blur(5px);
+        }
+
+        #hamburger-btn:active {
+            background: rgba(255, 255, 255, 1);
+        }
+
         /* ── 側邊欄 ────────────────────────────────── */
         #sidebar { 
             width: 240px; 
@@ -24,6 +45,25 @@
             flex-direction: column; 
             flex-shrink: 0;
             overflow-y: auto;
+        }
+
+        #sidebar.mobile-open {
+            transform: translateX(0);
+        }
+
+        #sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+
+        #sidebar-overlay.active {
+            display: block;
         }
 
         .user-tag { font-size: 13px; color: #4f46e5; background: #eef2ff; padding: 8px; border-radius: 6px; margin-bottom: 15px; font-weight: bold; text-align: center; border: 1px solid #c7d2fe; }
@@ -40,10 +80,11 @@
         #calendar-container { 
             flex-grow: 1; 
             padding: 15px; 
-            height: 100vh; 
             box-sizing: border-box; 
             display: flex; 
             flex-direction: column;
+            height: 100dvh;
+            width: 100%;
         }
 
         #calendar { 
@@ -132,7 +173,10 @@
         @media (max-width: 768px) {
             body { 
                 flex-direction: row;
-                position: relative;
+            }
+
+            #hamburger-btn {
+                display: block;
             }
 
             /* ── 側邊欄改為可滑動面板 ── */
@@ -141,7 +185,7 @@
                 left: 0;
                 top: 0;
                 width: 280px;
-                height: 100vh;
+                height: 100dvh;
                 z-index: 1000;
                 transform: translateX(-100%);
                 border-right: none;
@@ -150,20 +194,8 @@
                 padding: 20px;
             }
 
-            #sidebar.mobile-open {
-                transform: translateX(0);
-            }
-
-            /* ── 遮罩層 ── */
             #sidebar-overlay {
                 display: none;
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background: rgba(0, 0, 0, 0.5);
-                z-index: 999;
             }
 
             #sidebar-overlay.active {
@@ -173,7 +205,7 @@
             /* ── 日曆獨佔全屏 ── */
             #calendar-container {
                 padding: 15px;
-                height: 100vh;
+                height: 100dvh;
                 width: 100%;
             }
 
@@ -221,13 +253,21 @@
         }
 
         @media (max-width: 480px) {
+            #hamburger-btn {
+                padding: 6px 10px;
+                font-size: 18px;
+                top: 8px;
+                right: 8px;
+            }
+
             #sidebar {
                 width: 250px;
                 padding: 15px;
             }
 
             #calendar-container {
-                padding: 8px;
+                padding: 10px;
+                height: 100dvh;
             }
 
             h4 {
@@ -259,6 +299,7 @@
 </head>
 <body>
 
+<button id="hamburger-btn" onclick="toggleSidebar()">☰</button>
 <div id="sidebar-overlay" onclick="closeSidebar()"></div>
 
 <div id="auth-overlay">
@@ -295,42 +336,12 @@
 </div>
 
 <script>
-    // ── 手指滑動控制 ────────────────────────────────
-    let touchStartX = 0;
-    let touchStartY = 0;
-    const SWIPE_THRESHOLD = 50;
-
-    document.addEventListener('touchstart', function(e) {
-        touchStartX = e.touches[0].clientX;
-        touchStartY = e.touches[0].clientY;
-    }, { passive: true });
-
-    document.addEventListener('touchmove', function(e) {
-        if (!touchStartX) return;
-        const touchEndX = e.touches[0].clientX;
-        const touchEndY = e.touches[0].clientY;
-        const diffX = touchEndX - touchStartX;
-        const diffY = Math.abs(touchEndY - touchStartY);
-
-        // 判斷是否為水平滑動（不是垂直滑動）
-        if (diffY < SWIPE_THRESHOLD && diffX > SWIPE_THRESHOLD) {
-            // 從左邊向右滑動打開側邊欄
-            if (touchStartX < 30) {
-                openSidebar();
-            }
-        }
-    }, { passive: true });
-
-    document.addEventListener('touchend', function() {
-        touchStartX = 0;
-        touchStartY = 0;
-    }, { passive: true });
-
-    function openSidebar() {
+    // ── 漢堡菜單控制 ────────────────────────────────
+    function toggleSidebar() {
         const sidebar = document.getElementById('sidebar');
         const overlay = document.getElementById('sidebar-overlay');
-        sidebar.classList.add('mobile-open');
-        overlay.classList.add('active');
+        sidebar.classList.toggle('mobile-open');
+        overlay.classList.toggle('active');
     }
 
     function closeSidebar() {
