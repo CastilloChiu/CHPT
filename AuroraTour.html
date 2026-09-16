@@ -17,9 +17,9 @@
         /* ── 漢堡菜單按鈕 ────────────────────────────── */
         #hamburger-btn {
             display: none;
-            position: fixed;
-            top: 15px;
-            left: 15px;
+            position: absolute;
+            top: 10px;
+            right: 10px;
             z-index: 1001;
             background: white;
             border: none;
@@ -73,8 +73,24 @@
             font-size: 12px; opacity: 0.85; box-shadow: 0 3px 6px rgba(0,0,0,0.1); transition: 0.2s;
         }
 
-        #calendar-container { flex-grow: 1; padding: 15px; height: 100vh; box-sizing: border-box; display: flex; flex-direction: column; }
-        #calendar { background: white; padding: 10px; border-radius: 12px; box-shadow: 0 8px 20px rgba(0,0,0,0.06); flex-grow: 1; overflow: hidden; }
+        #calendar-container { 
+            flex-grow: 1; 
+            padding: 15px; 
+            height: 100vh; 
+            box-sizing: border-box; 
+            display: flex; 
+            flex-direction: column;
+            position: relative;
+        }
+
+        #calendar { 
+            background: white; 
+            padding: 10px; 
+            border-radius: 12px; 
+            box-shadow: 0 8px 20px rgba(0,0,0,0.06); 
+            flex-grow: 1; 
+            overflow: hidden; 
+        }
 
         #auth-overlay { 
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
@@ -256,7 +272,6 @@
 </head>
 <body>
 
-<button id="hamburger-btn" onclick="toggleSidebar()">☰</button>
 <div id="sidebar-overlay" onclick="closeSidebar()"></div>
 
 <div id="auth-overlay">
@@ -289,6 +304,7 @@
 </div>
 
 <div id="calendar-container">
+    <button id="hamburger-btn" onclick="toggleSidebar()">☰</button>
     <div id="calendar"></div>
 </div>
 
