@@ -17,17 +17,23 @@
         /* ── 漢堡菜單按鈕 ────────────────────────────── */
         #hamburger-btn {
             display: none;
-            position: absolute;
+            position: fixed;
             top: 10px;
             right: 10px;
             z-index: 1001;
-            background: white;
+            background: rgba(255, 255, 255, 0.7);
             border: none;
             padding: 8px 12px;
             border-radius: 6px;
             cursor: pointer;
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
             font-size: 20px;
+            backdrop-filter: blur(5px);
+            transition: background 0.2s ease;
+        }
+
+        #hamburger-btn:active {
+            background: rgba(255, 255, 255, 0.95);
         }
 
         /* ── 側邊欄 ────────────────────────────────── */
@@ -80,7 +86,6 @@
             box-sizing: border-box; 
             display: flex; 
             flex-direction: column;
-            position: relative;
         }
 
         #calendar { 
@@ -187,8 +192,8 @@
             }
 
             #calendar-container {
-                padding: 10px;
-                height: calc(100vh - 10px);
+                padding: 15px;
+                height: 100vh;
             }
 
             #calendar {
@@ -240,7 +245,7 @@
             }
 
             #calendar-container {
-                padding: 8px;
+                padding: 15px;
             }
 
             h4 {
@@ -272,6 +277,7 @@
 </head>
 <body>
 
+<button id="hamburger-btn" onclick="toggleSidebar()">☰</button>
 <div id="sidebar-overlay" onclick="closeSidebar()"></div>
 
 <div id="auth-overlay">
@@ -298,13 +304,12 @@
     <!-- 圖例 -->
     <h4 style="margin-top: 16px;">📅 Legend</h4>
     <div class="legend-row"><div class="legend-dot" style="background:rgba(239,68,68,0.25);"></div> Saturday/Sunday</div>
-    <div class="legend-row"><div class="legend-dot" style="background:#f7df2a;"></div> 國定假日</div>
+    <div class="legend-row"><div class="legend-dot" style="background:#f59e0b;"></div> 國定假日</div>
 
     <button onclick="logout()" style="margin-top:auto; padding: 10px; border: none; background: #fee2e2; color: #991b1b; cursor: pointer; border-radius: 8px; font-weight: bold; font-size: 12px;">Logout</button>
 </div>
 
 <div id="calendar-container">
-    <button id="hamburger-btn" onclick="toggleSidebar()">☰</button>
     <div id="calendar"></div>
 </div>
 
@@ -445,7 +450,7 @@
         start: h.start,
         end:   h.end,
         display: 'background',
-        backgroundColor: '#f7df2a',
+        backgroundColor: '#f59e0b',
         classNames: ['holiday-bg'],
         extendedProps: { isHoliday: true, holidayName: h.title }
     }));
