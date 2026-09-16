@@ -14,40 +14,6 @@
         :root { --primary: #6366f1; --bg: #f8fafc; }
         body { font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; display: flex; margin: 0; background: var(--bg); height: 100vh; overflow: hidden; }
         
-        /* ── 頂部導航欄 ────────────────────────────── */
-        #mobile-header {
-            display: none;
-            height: 50px;
-            background: white;
-            border-bottom: 1px solid #e2e8f0;
-            padding: 0 15px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-shrink: 0;
-        }
-
-        #hamburger-btn {
-            background: none;
-            border: none;
-            padding: 8px 12px;
-            cursor: pointer;
-            font-size: 20px;
-            color: #334155;
-        }
-
-        .mobile-header-title {
-            font-size: 16px;
-            font-weight: bold;
-            color: #334155;
-            flex-grow: 1;
-            text-align: center;
-        }
-
-        .mobile-header-spacer {
-            width: 44px;
-        }
-
         /* ── 側邊欄 ────────────────────────────────── */
         #sidebar { 
             width: 240px; 
@@ -58,26 +24,6 @@
             flex-direction: column; 
             flex-shrink: 0;
             overflow-y: auto;
-            transition: transform 0.3s ease;
-        }
-
-        #sidebar.mobile-open {
-            transform: translateX(0);
-        }
-
-        #sidebar-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 999;
-        }
-
-        #sidebar-overlay.active {
-            display: block;
         }
 
         .user-tag { font-size: 13px; color: #4f46e5; background: #eef2ff; padding: 8px; border-radius: 6px; margin-bottom: 15px; font-weight: bold; text-align: center; border: 1px solid #c7d2fe; }
@@ -94,10 +40,10 @@
         #calendar-container { 
             flex-grow: 1; 
             padding: 15px; 
+            height: 100vh; 
             box-sizing: border-box; 
             display: flex; 
             flex-direction: column;
-            overflow: hidden;
         }
 
         #calendar { 
@@ -185,13 +131,11 @@
         /* ── 手機版媒體查詢 ────────────────────────────────── */
         @media (max-width: 768px) {
             body { 
-                flex-direction: column;
+                flex-direction: row;
+                position: relative;
             }
 
-            #mobile-header {
-                display: flex;
-            }
-
+            /* ── 側邊欄改為可滑動面板 ── */
             #sidebar {
                 position: fixed;
                 left: 0;
@@ -202,13 +146,35 @@
                 transform: translateX(-100%);
                 border-right: none;
                 box-shadow: 2px 0 10px rgba(0,0,0,0.15);
-                padding-top: 20px;
-                padding-bottom: 20px;
+                transition: transform 0.3s ease;
+                padding: 20px;
             }
 
+            #sidebar.mobile-open {
+                transform: translateX(0);
+            }
+
+            /* ── 遮罩層 ── */
+            #sidebar-overlay {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.5);
+                z-index: 999;
+            }
+
+            #sidebar-overlay.active {
+                display: block;
+            }
+
+            /* ── 日曆獨佔全屏 ── */
             #calendar-container {
-                padding: 10px;
-                height: calc(100vh - 60px);
+                padding: 15px;
+                height: 100vh;
+                width: 100%;
             }
 
             #calendar {
@@ -255,33 +221,13 @@
         }
 
         @media (max-width: 480px) {
-            #mobile-header {
-                height: 45px;
-                padding: 0 10px;
-            }
-
-            #hamburger-btn {
-                padding: 6px 10px;
-                font-size: 18px;
-            }
-
-            .mobile-header-title {
-                font-size: 14px;
-            }
-
-            .mobile-header-spacer {
-                width: 40px;
-            }
-
             #sidebar {
                 width: 250px;
-                padding-top: 15px;
-                padding-bottom: 15px;
+                padding: 15px;
             }
 
             #calendar-container {
                 padding: 8px;
-                height: calc(100vh - 55px);
             }
 
             h4 {
@@ -312,13 +258,6 @@
     </style>
 </head>
 <body>
-
-<!-- ── 手機頂部導航欄 ── -->
-<div id="mobile-header">
-    <button id="hamburger-btn" onclick="toggleSidebar()">☰</button>
-    <div class="mobile-header-title">Aurora Tour</div>
-    <div class="mobile-header-spacer"></div>
-</div>
 
 <div id="sidebar-overlay" onclick="closeSidebar()"></div>
 
@@ -356,12 +295,42 @@
 </div>
 
 <script>
-    // ── 漢堡菜單控制 ────────────────────────────────
-    function toggleSidebar() {
+    // ── 手指滑動控制 ────────────────────────────────
+    let touchStartX = 0;
+    let touchStartY = 0;
+    const SWIPE_THRESHOLD = 50;
+
+    document.addEventListener('touchstart', function(e) {
+        touchStartX = e.touches[0].clientX;
+        touchStartY = e.touches[0].clientY;
+    }, { passive: true });
+
+    document.addEventListener('touchmove', function(e) {
+        if (!touchStartX) return;
+        const touchEndX = e.touches[0].clientX;
+        const touchEndY = e.touches[0].clientY;
+        const diffX = touchEndX - touchStartX;
+        const diffY = Math.abs(touchEndY - touchStartY);
+
+        // 判斷是否為水平滑動（不是垂直滑動）
+        if (diffY < SWIPE_THRESHOLD && diffX > SWIPE_THRESHOLD) {
+            // 從左邊向右滑動打開側邊欄
+            if (touchStartX < 30) {
+                openSidebar();
+            }
+        }
+    }, { passive: true });
+
+    document.addEventListener('touchend', function() {
+        touchStartX = 0;
+        touchStartY = 0;
+    }, { passive: true });
+
+    function openSidebar() {
         const sidebar = document.getElementById('sidebar');
         const overlay = document.getElementById('sidebar-overlay');
-        sidebar.classList.toggle('mobile-open');
-        overlay.classList.toggle('active');
+        sidebar.classList.add('mobile-open');
+        overlay.classList.add('active');
     }
 
     function closeSidebar() {
