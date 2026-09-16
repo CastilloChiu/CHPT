@@ -14,7 +14,54 @@
         :root { --primary: #6366f1; --bg: #f8fafc; }
         body { font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; display: flex; margin: 0; background: var(--bg); height: 100vh; overflow: hidden; }
         
-        #sidebar { width: 240px; background: white; padding: 20px; border-right: 1px solid #e2e8f0; display: flex; flex-direction: column; flex-shrink: 0; }
+        /* ── 漢堡菜單按鈕 ────────────────────────────── */
+        #hamburger-btn {
+            display: none;
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            z-index: 1001;
+            background: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            font-size: 20px;
+        }
+
+        /* ── 側邊欄 ────────────────────────────────── */
+        #sidebar { 
+            width: 240px; 
+            background: white; 
+            padding: 20px; 
+            border-right: 1px solid #e2e8f0; 
+            display: flex; 
+            flex-direction: column; 
+            flex-shrink: 0;
+            overflow-y: auto;
+            transition: transform 0.3s ease;
+        }
+
+        #sidebar.mobile-open {
+            transform: translateX(0);
+        }
+
+        #sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+
+        #sidebar-overlay.active {
+            display: block;
+        }
+
         .user-tag { font-size: 13px; color: #4f46e5; background: #eef2ff; padding: 8px; border-radius: 6px; margin-bottom: 15px; font-weight: bold; text-align: center; border: 1px solid #c7d2fe; }
         .admin-badge { background: #ef4444; color: white; font-size: 10px; padding: 2px 4px; border-radius: 3px; margin-left: 5px; }
         
@@ -88,22 +135,129 @@
         /* Legend in sidebar */
         .legend-row { display: flex; align-items: center; gap: 6px; font-size: 11px; color: #64748b; margin: 4px 0; }
         .legend-dot { width: 12px; height: 12px; border-radius: 3px; flex-shrink: 0; }
-            /* ✅ 👇 這裡加今天的樣式（最下面） */
-    .fc .fc-day-today {
-        background: transparent !important;
-        box-shadow: inset 0 0 0 12px #7deb34;
-        border-radius: 10px;
-    }
-    /* 🛠️ 請把下面這段直接貼在這裡 🛠️ */
-    .fc-event, 
-    .fc-event-main, 
-    .fc-event-title, 
-    .fc-event-time {
-        color: #000000 !important;
-    }
+        
+        .fc .fc-day-today {
+            background: transparent !important;
+            box-shadow: inset 0 0 0 12px #7deb34;
+            border-radius: 10px;
+        }
+
+        .fc-event, 
+        .fc-event-main, 
+        .fc-event-title, 
+        .fc-event-time {
+            color: #000000 !important;
+        }
+
+        /* ── 手機版媒體查詢 ────────────────────────────────── */
+        @media (max-width: 768px) {
+            body { flex-direction: column; }
+
+            #hamburger-btn {
+                display: block;
+            }
+
+            #sidebar {
+                position: fixed;
+                left: 0;
+                top: 0;
+                width: 280px;
+                height: 100vh;
+                z-index: 1000;
+                transform: translateX(-100%);
+                border-right: none;
+                box-shadow: 2px 0 10px rgba(0,0,0,0.15);
+                padding-top: 60px;
+            }
+
+            #calendar-container {
+                padding: 10px;
+                height: calc(100vh - 10px);
+            }
+
+            #calendar {
+                padding: 5px;
+            }
+
+            .fc-event {
+                font-size: 11px;
+                padding: 3px !important;
+                margin: 1px 0 !important;
+            }
+
+            /* 隱藏登入框的背景圖 */
+            #auth-overlay {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            }
+
+            .login-box {
+                width: 85vw;
+                max-width: 300px;
+                transform: translateY(0);
+                padding: 20px;
+            }
+
+            .login-box h2 {
+                font-size: 18px;
+                margin-bottom: 10px;
+            }
+
+            .login-box input {
+                font-size: 12px;
+                padding: 8px;
+            }
+
+            .login-box button {
+                font-size: 12px;
+                padding: 8px;
+            }
+
+            .obs-links a {
+                font-size: 10px;
+                margin: 0 5px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            #sidebar {
+                width: 250px;
+            }
+
+            #calendar-container {
+                padding: 8px;
+            }
+
+            h4 {
+                font-size: 12px;
+                margin: 8px 0 6px;
+            }
+
+            .user-tag {
+                font-size: 12px;
+                padding: 6px;
+            }
+
+            .legend-row {
+                font-size: 10px;
+            }
+
+            .fc-event {
+                font-size: 10px;
+            }
+
+            .holiday-label {
+                font-size: 12px;
+                bottom: 2px;
+                left: 2px;
+                right: 2px;
+            }
+        }
     </style>
 </head>
 <body>
+
+<button id="hamburger-btn" onclick="toggleSidebar()">☰</button>
+<div id="sidebar-overlay" onclick="closeSidebar()"></div>
 
 <div id="auth-overlay">
     <div class="login-box">
@@ -129,8 +283,7 @@
     <!-- 圖例 -->
     <h4 style="margin-top: 16px;">📅 Legend</h4>
     <div class="legend-row"><div class="legend-dot" style="background:rgba(239,68,68,0.25);"></div> Saturday/Sunday</div>
-    <!--<div class="legend-row"><div class="legend-dot" style="background:rgba(239,68,68,0.25);"></div> Sunday</div>-->
-    <div class="legend-row"><div class="legend-dot" style="background:#f59e0b;"></div> 國定假日</div>
+    <div class="legend-row"><div class="legend-dot" style="background:#f7df2a;"></div> 國定假日</div>
 
     <button onclick="logout()" style="margin-top:auto; padding: 10px; border: none; background: #fee2e2; color: #991b1b; cursor: pointer; border-radius: 8px; font-weight: bold; font-size: 12px;">Logout</button>
 </div>
@@ -140,6 +293,28 @@
 </div>
 
 <script>
+    // ── 漢堡菜單控制 ────────────────────────────────
+    function toggleSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebar-overlay');
+        sidebar.classList.toggle('mobile-open');
+        overlay.classList.toggle('active');
+    }
+
+    function closeSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebar-overlay');
+        sidebar.classList.remove('mobile-open');
+        overlay.classList.remove('active');
+    }
+
+    // 點擊側邊欄的按鈕後自動關閉
+    document.getElementById('sidebar').addEventListener('click', function(e) {
+        if (e.target.tagName === 'BUTTON' || e.target.closest('button')) {
+            closeSidebar();
+        }
+    });
+
     const firebaseConfig = {
       apiKey: "AIzaSyBCa6sqEOPE9xTIkd2or5b-RtC2rjBcOXw",
       authDomain: "aurora-tour-c46f3.firebaseapp.com",
@@ -254,7 +429,7 @@
         start: h.start,
         end:   h.end,
         display: 'background',
-        backgroundColor: '#f59e0b',
+        backgroundColor: '#f7df2a',
         classNames: ['holiday-bg'],
         extendedProps: { isHoliday: true, holidayName: h.title }
     }));
